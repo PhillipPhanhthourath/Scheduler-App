@@ -13,9 +13,11 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     /* Days of the month string array */
     private final ArrayList<String> daysOfMonth;
+    private final OnItemListener onItemListener;
 
-    CalendarAdapter(ArrayList<String> daysOfMonth) {
+    CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener) {
         this.daysOfMonth = daysOfMonth;
+        this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -25,7 +27,7 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         View view = inflater.inflate(R.layout.calendar_cell, parent, false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) (parent.getHeight() * 0.16666666666);
-        return new CalendarViewHolder(view);
+        return new CalendarViewHolder(view, onItemListener);
     }
 
     @Override
@@ -36,5 +38,9 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     @Override
     public int getItemCount() {
         return daysOfMonth.size();
+    }
+
+    public interface OnItemListener {
+        void onItemClick(int position, String dayText);
     }
 }

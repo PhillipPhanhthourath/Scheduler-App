@@ -8,13 +8,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <!-- Weekly View Button -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@color/transparent"
+        android:onClick="weeklyAction"
+        android:text="Weekly"
+        android:textColor="@color/blue"
+        android:textSize="20sp"/>
+
+    <!-- Middle Buttons Display -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp">
+        android:orientation="horizontal">
 
         <!-- Left Button -->
         <Button
@@ -23,11 +36,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/transparent"
+            android:onClick="previousMonthAction"
             android:text="@string/Left_Button_Arrow"
             android:textColor="@color/blue"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="previousMonthAction"/>
+            android:textStyle="bold" />
 
         <!-- Month / Year Display -->
         <TextView
@@ -47,15 +60,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/transparent"
+            android:onClick="nextMonthAction"
             android:text="@string/Right_Button_Arrow"
             android:textColor="@color/blue"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="nextMonthAction"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
-
-    <!-- Days Display -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -130,6 +141,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Calendar_Recycler_View"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="670dp" />
 
 </LinearLayout>

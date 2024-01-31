@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,8 @@ public class WeekViewActivity extends AppCompatActivity implements CalendarAdapt
 
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
+
+    private ListView eventListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,7 @@ public class WeekViewActivity extends AppCompatActivity implements CalendarAdapt
     private void initWidget() {
         calendarRecyclerView = findViewById(R.id.Calendar_Recycler_View);
         monthYearText = findViewById(R.id.Month_Year_Display);
+        eventListView = findViewById(R.id.eventListView);
     }
 
     private void setWeekView() {
@@ -41,6 +46,7 @@ public class WeekViewActivity extends AppCompatActivity implements CalendarAdapt
         RecyclerView.LayoutManager layoutmanager = new GridLayoutManager(getApplicationContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutmanager);
         calendarRecyclerView.setAdapter(calendarAdapter);
+        setEventAdapter();
     }
 
     public void previousWeekAction(View view) {
@@ -59,6 +65,19 @@ public class WeekViewActivity extends AppCompatActivity implements CalendarAdapt
         setWeekView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setEventAdapter();
+    }
+
+    private void setEventAdapter() {
+        ArrayList<Event> dailyEvents = Event.eventsForDate(CalendarUtils.selectedDate);
+        EventAdapter eventAdapter = new EventAdapter(getApplicationContext(), dailyEvents);
+        eventListView.setAdapter(eventAdapter);
+    }
+
     public void newEventAction(View view) {
+        startActivity(new Intent(this, EventEditActivity.class));
     }
 }

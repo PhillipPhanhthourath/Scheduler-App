@@ -146,7 +146,7 @@
         android:layout_height="45dp"
         android:background="@color/transparent"
         android:onClick="newEventAction"
-        android:text="New Event"
+        android:text="New Task"
         android:textColor="@color/blue"
         android:textSize="20sp"
         android:layout_gravity="center"

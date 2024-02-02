@@ -75,7 +75,19 @@ public class WeekViewActivity extends AppCompatActivity implements CalendarAdapt
         ArrayList<Event> dailyEvents = Event.eventsForDate(CalendarUtils.selectedDate);
         EventAdapter eventAdapter = new EventAdapter(getApplicationContext(), dailyEvents);
         eventListView.setAdapter(eventAdapter);
+
+        eventListView.setOnItemClickListener((parent, view, position, id) -> {
+            Event selectedEvent = dailyEvents.get(position);
+            Intent intent = new Intent(WeekViewActivity.this, EventEditActivity.class);
+            intent.putExtra("eventId", selectedEvent.getId());
+            intent.putExtra("eventName", selectedEvent.getName());
+            intent.putExtra("eventDescription", selectedEvent.getDescription());
+            intent.putExtra("eventDate", selectedEvent.getDate().toString());
+            intent.putExtra("eventTime", selectedEvent.getTime().toString());
+            startActivity(intent);
+        });
     }
+
 
     public void newEventAction(View view) {
         startActivity(new Intent(this, EventEditActivity.class));

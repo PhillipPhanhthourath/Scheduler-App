@@ -3,6 +3,7 @@ package com.example.scheduler_app;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Event {
 
@@ -11,16 +12,24 @@ public class Event {
     private String name;
     private LocalDate date;
     private LocalTime time;
-    private String description; // New field for event description
+    private String description;
+    private String id;
 
     public Event(String name, LocalDate date, LocalTime time, String description) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.date = date;
         this.time = time;
         this.description = description; // Set the event description
     }
 
-    // Getter and setter for event description
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getDescription() {
         return description;
     }
@@ -29,7 +38,6 @@ public class Event {
         this.description = description;
     }
 
-    // Existing getters and setters
     public String getName() {
         return name;
     }

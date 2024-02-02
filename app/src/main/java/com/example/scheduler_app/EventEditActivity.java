@@ -21,9 +21,29 @@ public class EventEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_edit);
-
         initWidgets();
-        initDefaultDateTime();
+
+        if (getIntent().hasExtra("eventId")) {
+            loadEventDetails(getIntent().getStringExtra("eventId"));
+        } else {
+            initDefaultDateTime();
+        }
+    }
+
+    private void loadEventDetails(String eventId) {
+        // Find the event by ID
+        for (Event event : Event.eventsList) {
+            if (event.getId().equals(eventId)) {
+                eventNameET.setText(event.getName());
+                eventDescriptionET.setText(event.getDescription());
+                eventDateET.setText(event.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                eventTimeET.setText(event.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+                // Store the event's date and time for potential use
+                eventDate = event.getDate();
+                eventTime = event.getTime();
+                break;
+            }
+        }
     }
 
     private void initWidgets() {
@@ -61,16 +81,29 @@ public class EventEditActivity extends AppCompatActivity {
     }
 
     public void saveEventAction(View view) {
+        String eventId = getIntent().getStringExtra("eventId");
         String eventName = eventNameET.getText().toString();
         String eventDescription = eventDescriptionET.getText().toString();
         LocalDate date = LocalDate.parse(eventDateET.getText().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalTime time = LocalTime.parse(eventTimeET.getText().toString(), DateTimeFormatter.ofPattern("HH:mm"));
 
-        // Assuming Event class has a constructor and methods to handle event description
-        Event newEvent = new Event(eventName, date, time, eventDescription);
-        Event.eventsList.add(newEvent);
-
-        // You can add additional logic here to handle the saved event, such as updating a database or returning to a previous activity
-        finish(); // Closes the activity and returns to the previous screen
+        // Update existing event if editing
+        if (eventId != null && !eventId.isEmpty()) {
+            for (Event event : Event.eventsList) {
+                if (event.getId().equals(eventId)) {
+                    event.setName(eventName);
+                    event.setDescription(eventDescription);
+                    event.setDate(date);
+                    event.setTime(time);
+                    break; // Event updated, break the loop
+                }
+            }
+        } else {
+            // Create a new event if adding
+            Event newEvent = new Event(eventName, date, time, eventDescription);
+            Event.eventsList.add(newEvent);
+        }
+        finish(); // Return to the previous activity
     }
+
 }

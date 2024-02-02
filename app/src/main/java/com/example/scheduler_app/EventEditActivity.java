@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Iterator;
 
 public class EventEditActivity extends AppCompatActivity {
 
@@ -23,12 +27,16 @@ public class EventEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_edit);
         initWidgets();
 
+        Button deleteButton = findViewById(R.id.deleteButton); // Make sure you have this ID set for your delete button
         if (getIntent().hasExtra("eventId")) {
             loadEventDetails(getIntent().getStringExtra("eventId"));
+            deleteButton.setVisibility(View.VISIBLE); // Show the delete button for existing events
         } else {
+            deleteButton.setVisibility(View.GONE); // Hide the delete button for new events
             initDefaultDateTime();
         }
     }
+
 
     private void loadEventDetails(String eventId) {
         // Find the event by ID
@@ -105,5 +113,27 @@ public class EventEditActivity extends AppCompatActivity {
         }
         finish(); // Return to the previous activity
     }
+
+    public void deleteEventAction(View view) {
+        String eventId = getIntent().getStringExtra("eventId");
+        if (eventId != null && !eventId.isEmpty()) {
+            // Use an iterator to avoid ConcurrentModificationException when removing
+            for (Iterator<Event> iterator = Event.eventsList.iterator(); iterator.hasNext(); ) {
+                Event event = iterator.next();
+                if (event.getId().equals(eventId)) {
+                    iterator.remove(); // Remove the event from the list
+                    Toast.makeText(this, "Event deleted", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity
+                    return; // Exit the method early
+                }
+            }
+            Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
+        } else {
+            // If we're trying to delete an event that hasn't been saved yet
+            Toast.makeText(this, "No event to delete", Toast.LENGTH_SHORT).show();
+        }
+        finish(); // Optionally close the activity even if no event was deleted
+    }
+
 
 }
